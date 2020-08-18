@@ -17,7 +17,7 @@ grpc=""
 dir=""
 
 while [ $# ];do case $1 in
-    --working-dir) dir="${2}"; shift ;;
+    --working-dir) dir=$(echo "${2}" | sed 's,/$,,g'); shift ;;
     --language) langs="${2}"; shift ;;
     --grpc) grpc="true";;
     --help) usage; exit 0 ;;
@@ -37,21 +37,20 @@ if [[ -z ${dir} ]]; then
 fi
 
 set -eu
-cmd="protoc "
+cmd="protoc --proto_path=${dir}"
 for lang in $(echo "${langs}" | tr ',' ' '); do
     echo "processing lang=${lang}"
-    cmd="${cmd} --${lang}_out=."
+    cmd="${cmd} --${lang}_out=${dir} "
     if [[ ${grpc} ]]; then
         echo "adding grpc flag for ${lang}"
-        cmd="${cmd} --grpc_out=. --plugin=protoc-gen-grpc=/usr/bin/grpc_${lang}_plugin "
+        cmd="${cmd} --grpc_out=${dir} --plugin=protoc-gen-grpc=/usr/bin/grpc_${lang}_plugin "
     fi
     echo "using cmd=${cmd}"
     proto=""
     for proto in $(find ${dir} -name \*.proto -print); do
-        path="${dir}/${proto}"
-        echo "running for ${path} file"
-        eval "${cmd} --proto_path=. ${path}"
-        echo "finished ${path} file"
+        echo "running for ${proto} file"
+        eval "${cmd} --proto_path=${dir} ${proto}"
+        echo "finished ${proto} file"
     done
     if [[ -z "${proto}" ]]; then
         echo "no .proto files found in working directory ${dir}!"

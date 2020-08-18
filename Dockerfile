@@ -135,7 +135,7 @@ RUN find /out -name "*.a" -delete -or -name "*.la" -delete
 
 
 FROM alpine:${ALPINE_VERSION}
-LABEL maintainer="The Jaeger Authors"
+LABEL maintainer="carl mcgraw"
 COPY --from=packer /out/ /
 RUN apk add --no-cache bash libstdc++ && \
     ln -s /usr/bin/grpc_cpp_plugin /usr/bin/protoc-gen-grpc-cpp && \
@@ -143,4 +143,4 @@ RUN apk add --no-cache bash libstdc++ && \
     ln -s /usr/bin/grpc_node_plugin /usr/bin/protoc-gen-grpc-js && \
     ln -s /usr/bin/grpc_python_plugin /usr/bin/protoc-gen-grpc-python
 COPY protoc-wrapper /usr/bin/protoc-wrapper
-ENTRYPOINT ["protoc-wrapper", "-I/usr/include"]
+ENTRYPOINT ["/usr/bin/protoc-wrapper"]
