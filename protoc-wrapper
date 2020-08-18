@@ -5,6 +5,7 @@ function usage() {
     echo "files easily"
     echo ""
     echo "  required arguments:"
+    echo "    --working-dir the working directory to use"
     echo "    --language    the language to generate in grpc, can be a csv"
     echo ""
     echo "  optional arguments:"
@@ -13,17 +14,24 @@ function usage() {
 
 langs=""
 grpc=""
+dir=""
 
 while [ $# ];do case $1 in
+    --working-dir) dir="${2}"; shift ;;
     --language) langs="${2}"; shift ;;
     --grpc) grpc="true";;
     --help) usage; exit 0 ;;
     *) break ;;
 esac; shift; done
 
-echo ${langs}
 if [[ -z ${langs} ]]; then
-    echo "Missing required parameter: --language"
+    echo "missing required parameter: --language"
+    usage
+    exit 1
+fi
+
+if [[ -z ${dir} ]]; then
+    echo "missing required parameter: --working-dir"
     usage
     exit 1
 fi
@@ -39,13 +47,14 @@ for lang in $(echo "${langs}" | tr ',' ' '); do
     fi
     echo "using cmd=${cmd}"
     proto=""
-    for proto in $(find . -name \*.proto -print); do
-        echo "running for ${proto} file"
-        eval "${cmd} --proto_path=. ${proto}"
-        echo "finished ${proto} file"
+    for proto in $(find ${dir} -name \*.proto -print); do
+        path="${dir}/${proto}"
+        echo "running for ${path} file"
+        eval "${cmd} --proto_path=. ${path}"
+        echo "finished ${path} file"
     done
     if [[ -z "${proto}" ]]; then
-        echo "no .proto files found in working directory!"
+        echo "no .proto files found in working directory ${dir}!"
         exit 1
     fi
     echo "finished processing for ${lang}"
