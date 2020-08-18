@@ -35,7 +35,7 @@ A lightweight `protoc` Docker image, published as `qarlm/protoc` to [Docker Hub]
 $ docker run \
         --rm \
         -v$(PWD):/protos \
-        qarlm/docker-protoc \
+        qarlm/protoc \
         --working-dir /protos
         --language <lang>
         --grpc
@@ -63,7 +63,7 @@ Example for Java:
 docker run \
    --rm \
    -v${PWD}:/protos \
-   qarlm/docker-protoc:latest \
+   qarlm/protoc:latest \
        --working-dir /protos
        --language java
        --grpc
