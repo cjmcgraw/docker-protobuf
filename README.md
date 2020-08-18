@@ -1,6 +1,6 @@
 # Protocol Buffers + Docker
 
-A lightweight `protoc` Docker image, published as `qarlm/docker-protoc` to [Docker Hub](https://hub.docker.com/repository/docker/qarlm/docker-protoc/tags), with all dependencies built-in, to generate code in multiple languages. Forked from https://github.com/jaegertracing/docker-protobuf.
+A lightweight `protoc` Docker image, published as `qarlm/docker-protoc` to [Docker Hub](https://hub.docker.com/repository/docker/qarlm/protoc/tags), with all dependencies built-in, to generate code in multiple languages. Forked from https://github.com/jaegertracing/docker-protobuf.
 
 ## Purpose
 
